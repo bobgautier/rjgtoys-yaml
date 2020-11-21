@@ -1,0 +1,10 @@
+#
+# This is data2
+#
+
+---
+
+name: data2
+description: YAML file loaded from another
+id: 42
+inner: !include data3.yaml

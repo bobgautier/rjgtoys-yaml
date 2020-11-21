@@ -1,0 +1,19 @@
+#
+# Test data for Yaml loader
+#
+
+---
+
+sequence:
+    - 1
+    - 2
+    - 3
+
+mapping:
+    a: 97
+    b: 98
+    c: 99
+
+included:
+    data2: !include data2.yaml
+
