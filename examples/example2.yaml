@@ -1,0 +1,11 @@
+#
+# This is example2
+#
+
+---
+
+name: "Example2"
+title: "Second example"
+description: Data loaded from example2.yaml
+data2: 42
+example1: !include example1.yaml

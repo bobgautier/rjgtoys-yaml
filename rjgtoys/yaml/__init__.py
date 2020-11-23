@@ -127,15 +127,25 @@ def yaml_load_path(path):
 
     return list(yaml_load_path(os.path.join(path, part)) for part in os.listdir(path))
 
-"""
-This might need replacing, somehow:
 
-def thing_to_yaml(rep, thing):
-    return rep.represent_mapping(yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG, thing)
+def _thing_to_yaml(rep, thing):
+    """Represent :class:`Thing` as a plain dict, and avoid sorting the keys."""
+
+    # https://stackoverflow.com/questions/16782112/can-pyyaml-dump-dict-items-in-non-alphabetical-order
+
+    value = []
+
+    for item_key, item_value in thing.items():
+        node_key = rep.represent_data(item_key)
+        node_value = rep.represent_data(item_value)
+
+        value.append((node_key, node_value))
+
+    return yaml.nodes.MappingNode(yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG, value)
 
 
-yaml.add_representer(Thing, thing_to_yaml)
-"""
+yaml.add_representer(Thing, _thing_to_yaml)
+
 
 def yaml_dump(obj, stream=None):
     """Dump an object as YAML to a stream sink."""

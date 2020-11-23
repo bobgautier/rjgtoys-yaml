@@ -1,0 +1,8 @@
+#
+# Example showing inclusion of a directory
+#
+
+name: Example4
+title: Fourth example
+parts: !include example4.d
+

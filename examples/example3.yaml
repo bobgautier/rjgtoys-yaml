@@ -1,0 +1,20 @@
+#
+# Simple example for loading YAML
+#
+
+---
+name: Example3
+title: "Third example"
+
+sequence:
+  - 1
+  - 2
+  - 3
+
+mapping:
+  a: 97
+  b: 98
+  c: 99
+
+example2: !include example2.yaml
+
