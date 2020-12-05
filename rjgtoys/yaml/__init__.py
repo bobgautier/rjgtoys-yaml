@@ -28,12 +28,15 @@ class YamlCantLoad(Error):
 
     detail = "Can't read YAML from non-file, non-directory '{path}'"
 
+# I don't think I can do anything about these, so turn them off:
+# pylint: disable=abstract-method
+# pylint: disable=too-many-ancestors
 
 class IncludeLoader(yaml.Loader):
     # from https://stackoverflow.com/questions/528281/how-can-i-include-a-yaml-file-inside-another
     """
-    yaml.Loader subclass handles "!include path/to/foo.yml" directives in config
-    files.  When constructed with a file object, the root path for includes
+    This :class:`yaml.Loader` subclass handles "!include path/to/foo.yml" directives
+    in YAML files.  When constructed with a file object, the root path for includes
     defaults to the directory containing the file, otherwise to the current
     working directory. In either case, the root path can be overridden by the
     `root` keyword argument.
@@ -42,7 +45,9 @@ class IncludeLoader(yaml.Loader):
     relative to F's location.
 
     Example:
-        YAML file /home/frodo/one-ring.yml
+
+    YAML file ``/home/frodo/one-ring.yml``::
+
             ---
             Name: The One Ring
             Specials:
@@ -50,23 +55,36 @@ class IncludeLoader(yaml.Loader):
             Effects:
                 - !include path/to/invisibility.yml
 
-        YAML file /home/frodo/path/to/invisibility.yml:
+    YAML file ``/home/frodo/path/to/invisibility.yml``::
+
             ---
             Name: invisibility
             Message: Suddenly you disappear!
 
-        Loading:
+    Loading::
+
             data = IncludeLoader(open('/home/frodo/one-ring.yml', 'r')).get_data()
 
-        Result:
-            {'Effects': [{'Message': 'Suddenly you disappear!', 'Name':
-                'invisibility'}], 'Name': 'The One Ring', 'Specials':
-                ['resize-to-wearer']}
+    Result::
+
+            {
+              'Effects': [
+                {
+                      'Message': 'Suddenly you disappear!',
+                   'Name': 'invisibility'
+                 }
+               ],
+               'Name': 'The One Ring',
+               'Specials': [
+                   'resize-to-wearer'
+                ]
+            }
+
     """
 
-    DEFAULT_INCLUDE_TAG="!include"
+    DEFAULT_INCLUDE_TAG = "!include"
 
-    DEFAULT_MAPPING_TYPE=Thing
+    DEFAULT_MAPPING_TYPE = Thing
 
     def __init__(self, *args, **kwargs):
         super(IncludeLoader, self).__init__(*args, **kwargs)
@@ -96,11 +114,15 @@ class IncludeLoader(yaml.Loader):
         return self._mapping_type(loader.construct_pairs(node))
 
     def _include(self, loader, node):
-        oldRoot = self.root
-        filename = os.path.join(self.root, loader.construct_scalar(node))
-        self.root = os.path.dirname(filename)
-        data = yaml_load_path(filename)
-        self.root = oldRoot
+        """Include a file and return its content."""
+
+        old_root = self.root
+        try:
+            filename = os.path.join(self.root, loader.construct_scalar(node))
+            self.root = os.path.dirname(filename)
+            data = yaml_load_path(filename)
+        finally:
+            self.root = old_root
         return data
 
 
@@ -108,7 +130,7 @@ def yaml_load(stream):
     """Parse YAML from a stream or string, and return the object."""
 
     if isinstance(stream, str):
-            stream = io.StringIO(stream)
+        stream = io.StringIO(stream)
 
     return yaml.load(stream, IncludeLoader)
 
