@@ -7,7 +7,7 @@ except ImportError:
 
 setup(
     name = "rjgtoys-yaml",
-    version = "0.0.1",
+    version = "0.0.2",
     author = "Robert J. Gautier",
     author_email = "bob.gautier@gmail.com",
     url = "https://github.com/bobgautier/rjgtoys-Yaml",

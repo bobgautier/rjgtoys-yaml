@@ -1,0 +1,18 @@
+---
+# This is a comment
+name: hashes
+title: Check comment handling
+
+data:
+  notes:
+   - C#3 # Is this a comment?
+   - c#
+   - E # with a comment
+   - c+2
+   - ces
+   - fis
+   - "c #2"
+
+
+
+

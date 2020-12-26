@@ -1,9 +1,5 @@
 To-do List
 ==========
 
-Write some code
-
-Write some tests
-
-Write the docs
+Write a test for the ``root`` parameter of the ``IncludeLoader``.
 

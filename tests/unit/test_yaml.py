@@ -1,7 +1,12 @@
 
 import os
+import io
 
-from rjgtoys.yaml import yaml_load
+import pytest
+
+from rjgtoys.thing import Thing
+
+from rjgtoys.yaml import yaml_load, yaml_load_path, yaml_dump, YamlCantLoad
 
 
 def test_loads():
@@ -40,3 +45,47 @@ def test_load_file():
 
     assert data.included.data2.inner.data3 == 333
 
+def test_yaml_dump():
+
+    # Keys are deliberately not in alphabetical order
+
+    data = Thing(b=2, a=1)
+
+    out = io.StringIO()
+
+    yaml_dump(data, stream=out)
+
+    result = out.getvalue()
+    assert result == """b: 2\na: 1\n"""
+
+def test_load_path_file():
+
+    d = os.path.dirname(__file__)
+
+    srcpath = os.path.join(d, 'data3.yaml')
+
+    data = yaml_load_path(srcpath)
+
+    assert data.data3 == 333
+
+def test_load_path_dir():
+
+    d = os.path.dirname(__file__)
+
+    srcpath = os.path.join(d, 'data.d')
+
+    data = yaml_load_path(srcpath)
+
+    assert len(data) == 2
+
+    s = { x for d in data for x in d.items() }
+
+    assert s == {
+        ('file1','content1'),
+        ('file2','content2')
+    }
+
+def test_load_path_fails():
+
+    with pytest.raises(YamlCantLoad):
+        yaml_load_path('/dev/null')

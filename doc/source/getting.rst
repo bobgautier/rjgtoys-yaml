@@ -7,11 +7,11 @@ By the time you read this, ``rjgtoys-yaml`` should be available on PyPi::
 
 To get the source code::
 
-    git clone https://github.com/bobgautier/rjgtoys-Yaml.git
+    git clone https://github.com/bobgautier/rjgtoys-yaml.git
 
 To make the package available for your Python::
 
-    cd rjgtoys-Yaml
+    cd rjgtoys-yaml
     python ./setup.py develop --user
 
 If you are using a virtualenv, you should omit the ``--user`` option used

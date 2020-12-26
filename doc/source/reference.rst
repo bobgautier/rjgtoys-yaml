@@ -1,0 +1,4 @@
+Reference
+=========
+
+.. automodule:: rjgtoys.yaml
